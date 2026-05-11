@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description"
+    content="Dan's Rentals — Check room availability instantly. Search by room number to see status, rent, and amenities.">
+  <title>Dan's Rentals — Check Availability</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.SUPABASE_URL = "https://jmpftxayrlnnaiajwshe.supabase.co";
+    window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcGZ0eGF5cmxubmFpYWp3c2hlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODYxMDcsImV4cCI6MjA5Mzc2MjEwN30.9LxsA1GOAx9HkUqAQRMbHZKyOvefnzfg_RpMv4kjx4I";
+
+    // Initialize immediately
+    if (window.supabase) {
+      window._supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    }
+  </script>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+
+  <!-- ===== HERO ===== -->
+  <div class="tenant-hero">
+    <div
+      class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg">
+      🏢</div>
+    <h1 class="text-2xl sm:text-3xl font-bold mb-2">Dan's Rentals</h1>
+    <p class="text-sm sm:text-base opacity-80 max-w-xs mx-auto">Check room availability instantly — secure tenant
+      access.
+    </p>
+  </div>
+
+  <main class="max-w-lg mx-auto px-4 -mt-4 relative z-10">
+
+    <!-- ===== SEARCH ===== -->
+    <section class="bg-white rounded-2xl shadow-lg p-6 mb-6 border border-gray-100 fade-in">
+      <div class="space-y-4">
+        <div>
+          <label for="searchInput" class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block ml-1">Room
+            Number</label>
+          <input type="text" id="searchInput" placeholder='e.g. 1'
+            class="form-input text-base w-full px-5 py-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-teal-500"
+            autocomplete="off" autofocus>
+        </div>
+        <div>
+          <label for="passwordInput"
+            class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block ml-1">Room Password</label>
+          <input type="password" id="passwordInput" placeholder='Enter password'
+            class="form-input text-base w-full px-5 py-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-teal-500"
+            autocomplete="off">
+        </div>
+        <button onclick="searchRoom()" id="searchBtn"
+          class="w-full py-4 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-2xl shadow-lg shadow-teal-100 transition-all transform active:scale-95 flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Check Status
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== RESULT ===== -->
+    <section id="resultSection" class="mb-10">
+      <!-- Default state -->
+      <div id="defaultState" class="text-center py-12 opacity-60">
+        <svg class="w-16 h-16 mx-auto mb-3 text-teal-300" fill="none" stroke="currentColor" stroke-width="1.2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <p class="text-gray-500 text-sm">Type a room number and tap search<br>to see availability.</p>
+      </div>
+    </section>
+
+    <!-- ===== BROWSE VACANT ===== -->
+    <section class="mb-10">
+      <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-red-500"></span> Available Rooms
+      </h2>
+      <div id="vacantList" class="grid gap-3">
+        <!-- filled by JS -->
+      </div>
+      <p id="noVacant" class="hidden text-center text-sm text-gray-400 py-6">No vacant rooms at the moment.</p>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100">
+    © 2026 Dan's Rentals · Powered by Autopal
+  </footer>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="./rooms.js?v=7"></script>
+  <script src="./tenant.js?v=7"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW registered', reg))
+          .catch(err => console.error('SW failed', err));
+      });
+    }
+  </script>
+</body>
+
+</html>
