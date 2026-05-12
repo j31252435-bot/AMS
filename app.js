@@ -146,7 +146,8 @@ window.openModal = async function (roomNumber) {
           </select></div>
         <div><label class="block text-xs font-bold text-gray-400 uppercase mb-2">Room Password</label>
           <input type="text" id="roomPasswordInput" value="${room.roomPassword || ''}" placeholder="Tenant access password" class="w-full px-4 py-3 rounded-xl bg-gray-50 border-none text-sm"></div>
-        <button onclick="saveRoomDetails('${room.roomNumber}')" class="w-full py-4 bg-teal-600 text-white font-bold rounded-2xl">Save Changes</button>
+        <button onclick="saveRoomDetails('${room.roomNumber}')" class="w-full py-4 bg-teal-600 text-white font-bold rounded-2xl mb-3">Save Changes</button>
+        <button onclick="deleteRoomFlow('${room.roomNumber}')" class="w-full py-3 bg-red-50 text-red-500 font-bold rounded-2xl text-xs uppercase tracking-widest">Delete Room</button>
       </div>
     </div>`;
   document.getElementById('roomModal').classList.add('active');
@@ -160,6 +161,17 @@ window.saveRoomDetails = async function (roomNumber) {
   });
   if (res) { showToast('Room updated'); closeModal(); renderStats(); renderRooms(); }
   else alert('Save failed');
+};
+
+window.deleteRoomFlow = async function (roomNumber) {
+  if (!confirm(`Are you sure you want to delete ${formatRoomTitle(roomNumber)}? This cannot be undone.`)) return;
+  const ok = await deleteRoom(roomNumber);
+  if (ok) {
+    showToast('Room deleted');
+    closeModal();
+    renderStats();
+    renderRooms();
+  }
 };
 
 window.openAddRoomModal = function () {
