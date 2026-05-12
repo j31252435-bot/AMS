@@ -101,6 +101,28 @@ async function updateRoom(roomNumber, updates) {
   return data;
 }
 
+async function deleteRoom(roomNumber) {
+  const user = await getCurrentUser();
+  if (!user) throw new Error('Unauthorized');
+
+  const { error } = await _supabase
+    .from('rooms')
+    .delete()
+    .eq('room_number', roomNumber);
+
+  if (error) {
+    console.error('Error deleting room:', error);
+    if (error.code === '23503') {
+      alert('Cannot delete room because it is occupied or has records tied to it.');
+    } else {
+      alert('Failed to delete room: ' + error.message);
+    }
+    return false;
+  }
+  window.clearCache('rooms');
+  return true;
+}
+
 async function findRoom(roomNumber) {
   const { data, error } = await _supabase
     .from('rooms')
